@@ -1,1 +1,1 @@
-worker: node ./monitor.js
+monitor: node monitor.js
