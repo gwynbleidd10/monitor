@@ -2,46 +2,46 @@ require('isomorphic-fetch')
 require('dotenv').config()
 
 const urls = [
-    // {
-    //     name: "Е-Якутия",
-    //     url: 'https://e-yakutia.ru',
-    //     selector: '<input type="text" id="valueAll" class="form-control" name="text" placeholder="Введите название услуги или организации"/>',
-    //     hook: 'WORK_HOOK',
-    //     type: 'external',
-    //     timeout: 5000,
-    //     process: false,
-    //     alert: false
-    // },
-    // {
-    //     name: "ЕИТП - ПГУ",
-    //     url: 'https://beta.e-yakutia.ru',
-    //     selector: '<title ng-bind="Page.title()">Портал государственных и муниципальных услуг</title>',
-    //     hook: 'WORK_HOOK',
-    //     type: 'external',
-    // timeout: 5000,
-    // process: false,
-    //     alert: false
-    // },
-    // {
-    //     name: "ЕИТП - ВИС",
-    //     url: 'https://eitp.e-yakutia.ru',
-    //     selector: 'В вашем браузере отключена встроенная БД',
-    //     hook: 'WORK_HOOK',
-    //     type: 'inner',
-    // timeout: 5000,
-    //     process: false,
-    //     alert: false
-    // },
-    // {
-    //     name: "РСМЭВ",
-    //     url: 'http://rsmev.sakha.gov.ru/adapter-web/',
-    //     selector: '<input class="form-control" id="tynamoLoginUsername" name="tynamoLoginUsername" type="text" autocomplete="off">',
-    //     hook: 'WORK_HOOK',
-    //     type: 'inner',
-    // timeout: 5000,
-    //     process: false,
-    //     alert: false
-    // },
+    {
+        name: "Е-Якутия",
+        url: 'https://e-yakutia.ru',
+        selector: '<input type="text" id="valueAll" class="form-control" name="text" placeholder="Введите название услуги или организации"/>',
+        hook: 'WORK_HOOK',
+        type: 'external',
+        timeout: 5000,
+        process: false,
+        alert: false
+    },
+    {
+        name: "ЕИТП - ПГУ",
+        url: 'https://beta.e-yakutia.ru',
+        selector: '<title ng-bind="Page.title()">Портал государственных и муниципальных услуг</title>',
+        hook: 'WORK_HOOK',
+        type: 'external',
+        timeout: 5000,
+        process: false,
+        alert: false
+    },
+    {
+        name: "ЕИТП - ВИС",
+        url: 'https://eitp.e-yakutia.ru',
+        selector: 'В вашем браузере отключена встроенная БД',
+        hook: 'WORK_HOOK',
+        type: 'inner',
+        timeout: 5000,
+        process: false,
+        alert: false
+    },
+    {
+        name: "РСМЭВ",
+        url: 'http://rsmev.sakha.gov.ru/adapter-web/',
+        selector: '<input class="form-control" id="tynamoLoginUsername" name="tynamoLoginUsername" type="text" autocomplete="off">',
+        hook: 'WORK_HOOK',
+        type: 'inner',
+        timeout: 5000,
+        process: false,
+        alert: false
+    },
     {
         name: "ОИП",
         url: 'https://sakha.gov.ru',
@@ -52,16 +52,16 @@ const urls = [
         process: false,
         alert: false
     },
-    // {
-    //     name: "WorkAPI",
-    //     url: 'https://workapi.rcitsakha.ru',
-    //     selector: '<div class="monitor" style="display:none"></div>',
-    //     hook: 'DEV_HOOK',
-    //     type: 'external',
-    //     timeout: 5000,
-    //     process: false,
-    //     alert: false
-    // }
+    {
+        name: "WorkAPI",
+        url: 'https://workapi.rcitsakha.ru',
+        selector: '<div class="monitor" style="display:none"></div>',
+        hook: 'DEV_HOOK',
+        type: 'external',
+        timeout: 5000,
+        process: false,
+        alert: false
+    }
 ]
 
 const sendHook = (level, is) => {
@@ -117,7 +117,6 @@ const check = async (is) => {
         console.log(`${is.url}: PROBLEM:${err}`)
     }
     is.process = false
-    console.log(is)
 }
 
 const start = async () => {
@@ -130,5 +129,5 @@ const start = async () => {
     }
 }
 
-setInterval(start, 15000)
+setInterval(start, 10000)
 start()
