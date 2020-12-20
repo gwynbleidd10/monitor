@@ -35,6 +35,14 @@ const urls = [
         alert: false
     },
     {
+        name: "ОИП",
+        url: 'https://sakha.gov.ru',
+        selector: 'Все материалы сайта доступны по лицензии',
+        hook: 'WORK_HOOK',
+        type: 'external',
+        alert: false
+    },
+    {
         name: "WorkAPI",
         url: 'https://workapi.rcitsakha.ru',
         selector: '<div class="monitor" style="display:none"></div>',
@@ -65,6 +73,7 @@ const check = async (is) => {
             signal: controller.signal,
             redirect: "follow"
         })
+        // console.log(await result.text())
         if (result.status == 200) {
             if ((await result.text()).includes(is.selector)) {
                 if (is.alert) {
