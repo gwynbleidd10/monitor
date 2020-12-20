@@ -2,54 +2,66 @@ require('isomorphic-fetch')
 require('dotenv').config()
 
 const urls = [
-    {
-        name: "Е-Якутия",
-        url: 'https://e-yakutia.ru',
-        selector: '<input type="text" id="valueAll" class="form-control" name="text" placeholder="Введите название услуги или организации"/>',
-        hook: 'WORK_HOOK',
-        type: 'external',
-        alert: false
-    },
-    {
-        name: "ЕИТП - ПГУ",
-        url: 'https://beta.e-yakutia.ru',
-        selector: '<title ng-bind="Page.title()">Портал государственных и муниципальных услуг</title>',
-        hook: 'WORK_HOOK',
-        type: 'external',
-        alert: false
-    },
-    {
-        name: "ЕИТП - ВИС",
-        url: 'https://eitp.e-yakutia.ru',
-        selector: 'В вашем браузере отключена встроенная БД',
-        hook: 'WORK_HOOK',
-        type: 'inner',
-        alert: false
-    },
-    {
-        name: "РСМЭВ",
-        url: 'http://rsmev.sakha.gov.ru/adapter-web/',
-        selector: '<input class="form-control" id="tynamoLoginUsername" name="tynamoLoginUsername" type="text" autocomplete="off">',
-        hook: 'WORK_HOOK',
-        type: 'inner',
-        alert: false
-    },
+    // {
+    //     name: "Е-Якутия",
+    //     url: 'https://e-yakutia.ru',
+    //     selector: '<input type="text" id="valueAll" class="form-control" name="text" placeholder="Введите название услуги или организации"/>',
+    //     hook: 'WORK_HOOK',
+    //     type: 'external',
+    //     timeout: 5000,
+    //     process: false,
+    //     alert: false
+    // },
+    // {
+    //     name: "ЕИТП - ПГУ",
+    //     url: 'https://beta.e-yakutia.ru',
+    //     selector: '<title ng-bind="Page.title()">Портал государственных и муниципальных услуг</title>',
+    //     hook: 'WORK_HOOK',
+    //     type: 'external',
+    // timeout: 5000,
+    // process: false,
+    //     alert: false
+    // },
+    // {
+    //     name: "ЕИТП - ВИС",
+    //     url: 'https://eitp.e-yakutia.ru',
+    //     selector: 'В вашем браузере отключена встроенная БД',
+    //     hook: 'WORK_HOOK',
+    //     type: 'inner',
+    // timeout: 5000,
+    //     process: false,
+    //     alert: false
+    // },
+    // {
+    //     name: "РСМЭВ",
+    //     url: 'http://rsmev.sakha.gov.ru/adapter-web/',
+    //     selector: '<input class="form-control" id="tynamoLoginUsername" name="tynamoLoginUsername" type="text" autocomplete="off">',
+    //     hook: 'WORK_HOOK',
+    //     type: 'inner',
+    // timeout: 5000,
+    //     process: false,
+    //     alert: false
+    // },
     {
         name: "ОИП",
         url: 'https://sakha.gov.ru',
         selector: 'Все материалы сайта доступны по лицензии',
         hook: 'WORK_HOOK',
         type: 'external',
+        timeout: 20000,
+        process: false,
         alert: false
     },
-    {
-        name: "WorkAPI",
-        url: 'https://workapi.rcitsakha.ru',
-        selector: '<div class="monitor" style="display:none"></div>',
-        hook: 'DEV_HOOK',
-        type: 'external',
-        alert: false
-    }
+    // {
+    //     name: "WorkAPI",
+    //     url: 'https://workapi.rcitsakha.ru',
+    //     selector: '<div class="monitor" style="display:none"></div>',
+    //     hook: 'DEV_HOOK',
+    //     type: 'external',
+    //     timeout: 5000,
+    //     process: false,
+    //     alert: false
+    // }
 ]
 
 const sendHook = (level, is) => {
@@ -67,7 +79,7 @@ const sendHook = (level, is) => {
 const check = async (is) => {
     const AbortController = require("abort-controller")
     const controller = new AbortController()
-    setTimeout(() => controller.abort(), 10000)
+    setTimeout(() => controller.abort(), is.timeout)
     try {
         let result = await fetch(is.url, {
             signal: controller.signal,
@@ -104,11 +116,15 @@ const check = async (is) => {
         }
         console.log(`${is.url}: PROBLEM:${err}`)
     }
+    is.process = false
+    console.log(is)
 }
 
 const start = async () => {
     for (const is of urls) {
-        if (is.type == process.env.TYPE) {
+        console.log(is)
+        if (is.type == process.env.TYPE && is.process != true) {
+            is.process = true
             await check(is)
         }
     }
