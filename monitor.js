@@ -6,28 +6,32 @@ const urls = [
         name: "Е-Якутия",
         url: 'https://e-yakutia.ru',
         selector: '<input type="text" id="valueAll" class="form-control" name="text" placeholder="Введите название услуги или организации"/>',
-        hook: 'DEV_HOOK',
+        hook: 'WORK_HOOK',
+        type: 'external',
         alert: false
     },
     {
         name: "ЕИТП - ПГУ",
         url: 'https://beta.e-yakutia.ru',
         selector: '<title ng-bind="Page.title()">Портал государственных и муниципальных услуг</title>',
-        hook: 'DEV_HOOK',
+        hook: 'WORK_HOOK',
+        type: 'external',
         alert: false
     },
     {
         name: "ЕИТП - ВИС",
         url: 'https://eitp.e-yakutia.ru',
         selector: 'В вашем браузере отключена встроенная БД',
-        hook: 'DEV_HOOK',
+        hook: 'WORK_HOOK',
+        type: 'inner',
         alert: false
     },
     {
         name: "РСМЭВ",
         url: 'http://rsmev.sakha.gov.ru/adapter-web/',
         selector: '<input class="form-control" id="tynamoLoginUsername" name="tynamoLoginUsername" type="text" autocomplete="off">',
-        hook: 'DEV_HOOK',
+        hook: 'WORK_HOOK',
+        type: 'inner',
         alert: false
     },
     {
@@ -35,7 +39,8 @@ const urls = [
         url: 'https://workapi.rcitsakha.ru',
         selector: '<div class="monitor" style="display:none"></div>',
         hook: 'DEV_HOOK',
-        alert: true
+        type: 'external',
+        alert: false
     }
 ]
 
@@ -94,7 +99,9 @@ const check = async (is) => {
 
 const start = async () => {
     for (const is of urls) {
-        await check(is)
+        if (is.type == process.env.type) {
+            await check(is)
+        }
     }
 }
 
