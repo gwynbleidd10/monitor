@@ -132,6 +132,7 @@ const check = async (is) => {
 }
 
 const start = async () => {
+    console.log("=========Iter========")
     for (const is of urls) {
         // console.log(is)
         if (is.type == process.env.TYPE) {
