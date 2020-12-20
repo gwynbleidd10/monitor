@@ -88,7 +88,6 @@ const check = async (is) => {
         })
         const requestTime = (new Date() - timeStart)
         // console.log(await result.text())
-        console.log(requestTime)
         if (result.status == 200) {
             if ((await result.text()).includes(is.selector)) {
                 if (requestTime > is.timeout) {
@@ -105,6 +104,7 @@ const check = async (is) => {
                     sendHook(3, is)
                     console.log(`${is.url}: OK`)
                 }
+                console.log(`${is.url}: ${requestTime}`)
             }
             else {
                 if (!is.alert) {
