@@ -121,7 +121,7 @@ const check = async (is) => {
 
 const start = async () => {
     for (const is of urls) {
-        console.log(is)
+        // console.log(is)
         if (is.type == process.env.TYPE && is.process != true) {
             is.process = true
             await check(is)
