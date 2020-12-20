@@ -79,7 +79,7 @@ const sendHook = (level, is) => {
 const check = async (is) => {
     const AbortController = require("abort-controller")
     const controller = new AbortController()
-    setTimeout(() => controller.abort(), 25000)
+    setTimeout(() => controller.abort(), 15000)
     try {
         const timeStart = new Date()
         let result = await fetch(is.url, {
@@ -92,22 +92,25 @@ const check = async (is) => {
             if ((await result.text()).includes(is.selector)) {
                 if (requestTime > is.timeout) {
                     is.warnings++
-                    if (is.warnings >= 2) {
+                    if (!is.alert && is.warnings > 2) {
                         is.alert = true
                         sendHook(2, is)
                         console.log(`${is.url}: WARNING`)
                     }
                 }
-                else if (is.alert) {
-                    is.alert = false
+                else {
                     is.warnings = 0
-                    sendHook(3, is)
-                    console.log(`${is.url}: OK`)
+                    if (is.alert) {
+                        is.alert = false
+                        sendHook(3, is)
+                        console.log(`${is.url}: OK`)
+                    }
                 }
                 console.log(`${is.url}: ${requestTime}`)
             }
             else {
-                if (!is.alert) {
+                is.warnings++
+                if (!is.alert && is.warnings > 2) {
                     is.alert = true
                     sendHook(1, is)
                 }
@@ -115,14 +118,16 @@ const check = async (is) => {
             }
         }
         else {
-            if (!is.alert) {
+            is.warnings++
+            if (!is.alert && is.warnings > 2) {
                 is.alert = true
                 sendHook(0, is)
             }
             console.log(`${is.url}: PROBLEM: ${result.status}`)
         }
     } catch (err) {
-        if (!is.alert) {
+        is.warnings++
+        if (!is.alert && is.warnings > 2) {
             is.alert = true
             sendHook(0, is)
         }
@@ -141,5 +146,5 @@ const start = async () => {
     }
 }
 
-setInterval(start, 30000)
+setInterval(start, 20000)
 start()
