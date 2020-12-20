@@ -9,7 +9,7 @@ const urls = [
         hook: 'WORK_HOOK',
         type: 'external',
         timeout: 5000,
-        process: false,
+        warnings: 0,
         alert: false
     },
     {
@@ -19,7 +19,7 @@ const urls = [
         hook: 'WORK_HOOK',
         type: 'external',
         timeout: 5000,
-        process: false,
+        warnings: 0,
         alert: false
     },
     {
@@ -29,7 +29,7 @@ const urls = [
         hook: 'WORK_HOOK',
         type: 'inner',
         timeout: 5000,
-        process: false,
+        warnings: 0,
         alert: false
     },
     {
@@ -39,7 +39,7 @@ const urls = [
         hook: 'WORK_HOOK',
         type: 'inner',
         timeout: 5000,
-        process: false,
+        warnings: 0,
         alert: false
     },
     {
@@ -48,8 +48,8 @@ const urls = [
         selector: 'Все материалы сайта доступны по лицензии',
         hook: 'WORK_HOOK',
         type: 'external',
-        timeout: 20000,
-        process: false,
+        timeout: 10000,
+        warnings: 0,
         alert: false
     },
     {
@@ -59,7 +59,7 @@ const urls = [
         hook: 'DEV_HOOK',
         type: 'external',
         timeout: 5000,
-        process: false,
+        warnings: 0,
         alert: false
     }
 ]
@@ -68,10 +68,10 @@ const sendHook = (level, is) => {
     const { Webhook, MessageBuilder } = require('discord-webhook-node')
     const hook = new Webhook(process.env[is.hook])
     const embed = new MessageBuilder()
-        .setTitle((level == 0) ? 'PROBLEM' : (level == 1) ? 'WARNING' : 'OK')
+        .setTitle((level == 0) ? 'PROBLEM' : (level == 1 || level == 2) ? 'WARNING' : 'OK')
         .setURL(is.url)
-        .addField(is.name, `${(level == 0) ? 'Потеряно соединение' : (level == 1) ? 'Проблема с контентом на сайте' : 'Доступ восстановлен'}`)
-        .setColor(`${(level == 0) ? '#B80F0A' : (level == 1) ? '#FFFF00' : '#4CBB17'}: ${is.name}`)
+        .addField(is.name, `${(level == 0) ? 'Потеряно соединение' : (level == 1) ? 'Проблема с контентом на сайте' : (level == 2) ? 'Слишком долгий ответ' : 'Доступ восстановлен'}`)
+        .setColor(`${(level == 0) ? '#B80F0A' : (level == 1 || level == 2) ? '#FFFF00' : '#4CBB17'}: ${is.name}`)
         .setTimestamp()
     hook.send(embed)
 }
@@ -79,20 +79,32 @@ const sendHook = (level, is) => {
 const check = async (is) => {
     const AbortController = require("abort-controller")
     const controller = new AbortController()
-    setTimeout(() => controller.abort(), is.timeout)
+    setTimeout(() => controller.abort(), 25000)
     try {
+        const timeStart = new Date()
         let result = await fetch(is.url, {
             signal: controller.signal,
             redirect: "follow"
         })
+        const requestTime = (new Date() - timeStart)
         // console.log(await result.text())
+        console.log(requestTime)
         if (result.status == 200) {
             if ((await result.text()).includes(is.selector)) {
-                if (is.alert) {
-                    is.alert = false
-                    sendHook(2, is)
+                if (requestTime > is.timeout) {
+                    is.warnings++
+                    if (is.warnings >= 2) {
+                        is.alert = true
+                        sendHook(2, is)
+                        console.log(`${is.url}: WARNING`)
+                    }
                 }
-                console.log(`${is.url}: OK`)
+                else if (is.alert) {
+                    is.alert = false
+                    is.warnings = 0
+                    sendHook(3, is)
+                    console.log(`${is.url}: OK`)
+                }
             }
             else {
                 if (!is.alert) {
@@ -122,12 +134,11 @@ const check = async (is) => {
 const start = async () => {
     for (const is of urls) {
         // console.log(is)
-        if (is.type == process.env.TYPE && is.process != true) {
-            is.process = true
+        if (is.type == process.env.TYPE) {
             await check(is)
         }
     }
 }
 
-setInterval(start, 10000)
+setInterval(start, 30000)
 start()
