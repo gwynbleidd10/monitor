@@ -42,16 +42,16 @@ const urls = [
         warnings: 0,
         alert: false
     },
-    {
-        name: "ОИП",
-        url: 'https://sakha.gov.ru',
-        selector: 'Все материалы сайта доступны по лицензии',
-        hook: 'WORK_HOOK',
-        type: 'external',
-        timeout: 10000,
-        warnings: 0,
-        alert: false
-    },
+    // {
+    //     name: "ОИП",
+    //     url: 'https://sakha.gov.ru',
+    //     selector: 'Все материалы сайта доступны по лицензии',
+    //     hook: 'WORK_HOOK',
+    //     type: 'external',
+    //     timeout: 10000,
+    //     warnings: 0,
+    //     alert: false
+    // },
     {
         name: "WorkAPI",
         url: 'https://workapi.rcitsakha.ru',
