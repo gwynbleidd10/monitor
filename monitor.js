@@ -67,7 +67,7 @@ const sendHook = (level, is) => {
 const check = async (is) => {
     const AbortController = require("abort-controller")
     const controller = new AbortController()
-    setTimeout(() => controller.abort(), 5000)
+    setTimeout(() => controller.abort(), 10000)
     try {
         let result = await fetch(is.url, {
             signal: controller.signal,
