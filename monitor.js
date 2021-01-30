@@ -4,7 +4,7 @@ require('dotenv').config()
 const urls = [
     {
         name: "Е-Якутия",
-        url: 'https://e-yakutia.ru',
+        url: 'https://old.e-yakutia.ru',
         selector: '<input type="text" id="valueAll" class="form-control" name="text" placeholder="Введите название услуги или организации"/>',
         hook: 'WORK_HOOK',
         type: 'external',
@@ -14,7 +14,7 @@ const urls = [
     },
     {
         name: "ЕИТП - ПГУ",
-        url: 'https://beta.e-yakutia.ru',
+        url: 'https://e-yakutia.ru',
         selector: '<title ng-bind="Page.title()">Портал государственных и муниципальных услуг</title>',
         hook: 'WORK_HOOK',
         type: 'external',
