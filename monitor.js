@@ -54,7 +54,7 @@ const urls = [
     // },
     {
         name: "WorkAPI",
-        url: 'https://workapi.rcitsakha.ru',
+        url: 'https://workapi.rcitsakha.ru/sc',
         selector: '<div class="monitor" style="display:none"></div>',
         hook: 'DEV_HOOK',
         type: 'external',
